@@ -1,0 +1,24 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  external_labels:
+    monitor: 'prometheus-dcos-forwarder'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+
+  - job_name: 'dcos-metrics'
+    # All master nodes are available at master.mesos via their A record
+    dns_sd_configs:
+      - names: ['master.mesos']
+        type: 'A'
+        port: 61091
+    # All agent nodes are written regularly to /tmp/agents.json
+    file_sd_configs:
+      - files: ['/tmp/agents.json']
+
+
